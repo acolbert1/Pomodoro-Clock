@@ -1,5 +1,6 @@
 import time
 import threading
+import random
  #    Decide on the task to be done. - input 4 tasks that the user wants to complete. these tasks should be stored in a list? ask the user for the input, and append the input to a list until the list has 4. 
 #     Set the pomodoro timer (traditionally to 25 minutes).[1] - after the list has 4 items, start a time for 25 minutes. probably has to use the datetime module
 #     Work on the task. 
@@ -11,56 +12,81 @@ import threading
 #to check if the item in the list has been completed, iterate through the list and check yes or no. if no then start the program
 
 #ToDo
-#0. Once the minutes get to 25, the timer needs to stop and go to the next step. 
-#1.Add the ability to ask the user if they've completed all of there tasks. Check the empty_tasks list and iterate through each index asking yes or no.  
+
+#1.Add the ability to ask the user if they've completed all of there tasks. Check the self.empty_tasks list and iterate through each index asking yes or no.  
 #2.If the user inputs no for any of the indexes, the program should time.sleep for a random period between 3-5 minutes and then the program should start a 25m timer again. 
 #3.If the user has completed all 4 tasks then print a good job message and start from scratch again. This needs to happen a total of 4 times.
 #4. Once the 4th pomodoro has completed, ask the user if they would like to continue and start another pomodoro, or are they done and would like to exit. Print a msg stating the program has ended. 
+#4. cleanup method names, print statements, and seconds. 
 
 class Pomodoro_Clock:
     def __init__(self):
         self.minutes_passed = 0
         self.minutes_remaining = 25
-
+        self.empty_tasks = []
     def tasks(self):
-        empty_tasks = []
+        
         i = 4
         
-        while len(empty_tasks) != i:
+        while len(self.empty_tasks) != i:
             user_input = input("What four tasks are you wanting to complete during this 25 minute Pomodoro period? ")
-            empty_tasks.append(user_input)
-            print(empty_tasks)
-            print(len(empty_tasks))
+            self.empty_tasks.append(user_input)
+            print(self.empty_tasks)
+            print(len(self.empty_tasks))
             
-            if len(empty_tasks) == i:
+            if len(self.empty_tasks) == i:
                 time.sleep(2)
                 print("The 25 minutes will now begin")
                 # self.timer()
         self.printit()
-        
-
-    # def restart_clock(self):
-    #     timer = threading.Timer
-    #     print("Did you complete all of your tasks?")
-    # #     #check each item in the list and if completed move to the next, if the first is n then restart 25 minutes 
-
-      
 
     def testtimer(self):
-        
-        self.minutes_passed = self.minutes_passed + 1
-        self.minutes_remaining = self.minutes_remaining - 1
-        print(str(self.minutes_passed) + " minutes has passed. There are " + str(self.minutes_remaining) + " minutes remaining.")
-        if self.minutes_passed == (25) and self.minutes_remaining == (0):
-            print("times up")
-            # timer.cancel()
-        return self.printit()
+        while self.minutes_passed < 25:
+            self.minutes_passed = self.minutes_passed + 1
+            self.minutes_remaining = self.minutes_remaining - 1
+            print(str(self.minutes_passed) + " minutes has passed. There are " + str(self.minutes_remaining) + " minutes remaining.")
+            return self.printit()
 
     def printit(self):
         timer = threading.Timer(1, self.testtimer)
         timer.start()
-        return self.printit()
+        self.twentyfiveminute()
+        
 
+    def twentyfiveminute(self):
+        if self.minutes_passed == (25) and self.minutes_remaining == (0):
+            print("times up")           
+            self.checkthelist()
+
+
+    def checkthelist(self):
+        time.sleep(2)
+        random_break = random.randrange(1, 15)  
+        print("Let's check each item to see if you've completed the task." )
+        tasks_completed = 0
+        for i in self.empty_tasks:
+            takeinput = input("Were you able to complete the " + i + " task? " )
+            if takeinput == "y" or takeinput == "yes":
+                tasks_completed = tasks_completed + 1
+                print()
+               
+            else:
+                if takeinput != "y" or takeinput != "yes":
+                    print("Since you did not complete the " + i + " task, you may take a break for 3-5 minutes.")
+                time.sleep(random_break)
+                self.tasks()
+                # return
+                    
+
+
+
+
+# random_break = random.randrange(180, 300)  
+# random_break = random.randrange(1, 15)  
+
+    
+
+    
 
         
 
