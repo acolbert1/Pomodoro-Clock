@@ -108,6 +108,7 @@ class Pomodoro_Clock:
             if restart_input == "y" or restart_input == "yes":
                 print("Starting over at 0")
                 self.pomodoro_session = 0
+                self.empty_tasks = []
                 return self.tasks()
             elif restart_input == "n" or restart_input == "no":
                     print("Good job on completing 4 Pomodoro sessions. Ending the program.")
