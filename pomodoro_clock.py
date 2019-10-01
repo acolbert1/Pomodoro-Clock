@@ -7,22 +7,22 @@ class Pomodoro_Clock:
         self.pomodoro_session = 0
         self.minutes_passed = 0
         self.minutes_remaining = 25
-        self.empty_tasks = []
+        self.list_of_items = []
         
     def tasks(self):
         self.pomodoro_session = self.pomodoro_session + 1
         i = 4
         
-        while len(self.empty_tasks) != i:
+        while len(self.list_of_items) != i:
             user_input = input("What four tasks would you like to complete during this 25 minute Pomodoro session? ")
-            self.empty_tasks.append(user_input)
-            print(self.empty_tasks)
-        if len(self.empty_tasks) == i:
+            self.list_of_items.append(user_input)
+            print(self.list_of_items)
+        if len(self.list_of_items) == i:
                 time.sleep(2)
                 print("Now that you have 4 items in the list, let's start the 25 minute timer.")
-        self.printit()
+        self.thread_timer()
 
-    def testtimer(self):
+    def time_passed(self):
         while self.minutes_passed < 25:
             self.minutes_passed = self.minutes_passed + 1
             self.minutes_remaining = self.minutes_remaining - 1
@@ -30,42 +30,42 @@ class Pomodoro_Clock:
                 print(str(self.minutes_passed) + " minute has passed. There are " + str(self.minutes_remaining) + " minutes remaining.")
             else:
                 print(str(self.minutes_passed) + " minutes have passed. There are " + str(self.minutes_remaining) + " minutes remaining.")
-            return self.printit()
+            return self.thread_timer()
 
-    def printit(self):
-        timer = threading.Timer(1, self.testtimer)
+    def thread_timer(self):
+        timer = threading.Timer(1, self.time_passed)
         timer.start()            
-        self.twentyfiveminute()
+        self.twenty_five_minutes()
 
-    def twentyfiveminute(self):
+    def twenty_five_minutes(self):
         if self.minutes_passed == (25) and self.minutes_remaining == (0):
             print("Times up!")           
-            self.checkthelist()
+            self.checklist()
 
-    def checkthelist(self):
+    def checklist(self):
         time.sleep(2)
         random_break = random.randrange(1, 15)  
         print("Let's check each item to see if you've completed the task." )
         self.tasks_completed = 0
         if self.pomodoro_session < 5:
-            for element in self.empty_tasks[:]:
+            for element in self.list_of_items[:]:
                 takeinput = ""
                 while takeinput != "n" and takeinput != "no" and takeinput != "yes" and takeinput != "y":
                     takeinput = input("Were you able to complete the " + element + " task? " )
                     if takeinput == "y" or takeinput == "yes":
                         self.tasks_completed = self.tasks_completed + 1
-                        self.empty_tasks.remove(element)
-                        print(self.empty_tasks)
+                        self.list_of_items.remove(element)
+                        print(self.list_of_items)
                     elif takeinput == "n" or takeinput == "no":
                         print("Keeping " + element + " in the list since you did not complete it. ")
                     else:
                         print("That isn't a yes or a no. Please try again.")
 
-        if self.empty_tasks == []:
+        if self.list_of_items == []:
                 print("you've completed all tasks for this session! Good job! Let's take a 3-5 minute break and then start the next session.")
         else:
-            if self.empty_tasks != []:
-                print("Since you weren't able to complete your whole list, here's what remains: " + str(self.empty_tasks) + ". Let's take a 3-5 minute break and then start the next session. The next task will be added to the end of the list.")
+            if self.list_of_items != []:
+                print("Since you weren't able to complete your whole list, here's what remains: " + str(self.list_of_items) + ". Let's take a 3-5 minute break and then start the next session. The next task will be added to the end of the list.")
 
         time.sleep(random_break)
         print("the current pomodoro session " + str(self.pomodoro_session))
@@ -80,7 +80,7 @@ class Pomodoro_Clock:
                 if restart_input == "y" or restart_input == "yes":
                     print("Starting over at 0")
                     self.pomodoro_session = 0
-                    self.empty_tasks = []
+                    self.list_of_items = []
                     return self.tasks()
                 elif restart_input == "n" or restart_input == "no":
                         print("Good job on completing 4 Pomodoro sessions. Ending the program.")
