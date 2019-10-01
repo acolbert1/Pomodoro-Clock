@@ -44,7 +44,7 @@ class Pomodoro_Clock:
 
     def checklist(self):
         time.sleep(2)
-        random_break = random.randrange(1, 15)  
+        random_break = random.randrange(180, 300)  
         print("Let's check each item to see if you've completed the task." )
         self.tasks_completed = 0
         if self.pomodoro_session < 5:
@@ -76,11 +76,13 @@ class Pomodoro_Clock:
     
     def session_check(self):
             if self.pomodoro_session == 4:
+                random_extended_break = random.randrange(900, 1800)
                 restart_input = input("You have completed 4 Pomodoro sessions, great job! Would you like to start over? ")
                 if restart_input == "y" or restart_input == "yes":
-                    print("Starting over at 0")
+                    print("Taking a 15-30 minute break and then will start the session back to 0.")
                     self.pomodoro_session = 0
                     self.list_of_items = []
+                    time.sleep(random_extended_break)
                     return self.tasks()
                 elif restart_input == "n" or restart_input == "no":
                         print("Good job on completing 4 Pomodoro sessions. Ending the program.")
